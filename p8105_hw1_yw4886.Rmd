@@ -1,7 +1,7 @@
 ---
 title: "P8105 Homework 1"
 author: "Yijia Wang"
-date: "2026-09-27"
+date: "2026-09-26"
 output: github_document
 ---
 
@@ -15,13 +15,13 @@ data("penguins", package = "palmerpenguins")
 
 ## Description of the dataset
 
--The `penguins` dataset contains `r nrow(penguins)` observations and
+- The `penguins` dataset contains `r nrow(penguins)` observations and
 `r ncol(penguins)` variables.
 
--The mean flipper length is
+- The mean flipper length is
 `r round(mean(penguins$flipper_length_mm, na.rm = TRUE), 2)` mm.
 
--Important variables include `species`, `island`, `bill_length_mm`,
+- Important variables include `species`, `island`, `bill_length_mm`,
 `bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, `sex`, and `year`.
 The species represented in the dataset are
 `r paste(unique(penguins$species), collapse = ", ")`.
@@ -30,11 +30,19 @@ The species represented in the dataset are
 ## Scatterplot
 ```{r}
 penguin_plot =
-  ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm,
-                       color = species)) +
-  geom_point()
+  ggplot(penguins, aes(
+    x = bill_length_mm,
+    y = flipper_length_mm,
+    color = species
+  )) +
+  geom_point(na.rm = TRUE)
 
 penguin_plot
+
+ggsave(
+  "penguin_scatterplot.png",
+  plot = penguin_plot
+)
 ```
 
 
@@ -62,8 +70,9 @@ mean(pull(hw_df, logical_vector))
 mean(pull(hw_df, character_vector))
 mean(pull(hw_df, factor_vector))
 ```
+Taking the mean works for the numeric and logical variables. The numeric variable has a mean of r mean(pull(hw_df, random_sample)), and the logical variable has a mean of r mean(pull(hw_df, logical_vector)). Taking the mean of the character and factor variables does not work because these variables are not numeric or logical.
 
-```{r, results='hide'}
+```{r, results='hide', warning=FALSE}
 as.numeric(pull(hw_df, logical_vector))
 as.numeric(pull(hw_df, character_vector))
 as.numeric(pull(hw_df, factor_vector))
