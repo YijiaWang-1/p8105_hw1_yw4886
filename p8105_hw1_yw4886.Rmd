@@ -1,0 +1,76 @@
+---
+title: "P8105 Homework 1"
+author: "Yijia Wang"
+date: "2026-09-27"
+output: github_document
+---
+
+# Problem 1
+
+```{r}
+library(tidyverse)
+
+data("penguins", package = "palmerpenguins")
+```
+
+## Description of the dataset
+
+-The `penguins` dataset contains `r nrow(penguins)` observations and
+`r ncol(penguins)` variables.
+
+-The mean flipper length is
+`r round(mean(penguins$flipper_length_mm, na.rm = TRUE), 2)` mm.
+
+-Important variables include `species`, `island`, `bill_length_mm`,
+`bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, `sex`, and `year`.
+The species represented in the dataset are
+`r paste(unique(penguins$species), collapse = ", ")`.
+
+
+## Scatterplot
+```{r}
+penguin_plot =
+  ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm,
+                       color = species)) +
+  geom_point()
+
+penguin_plot
+ggsave("penguin_scatterplot.png", plot = penguin_plot)
+```
+
+
+# Problem 2
+```{r}
+set.seed(1)
+hw_df =
+  tibble(
+    random_sample = rnorm(10),
+    logical_vector = random_sample > 0,
+    character_vector = c(
+      "a", "b", "c", "d", "e",
+      "f", "g", "h", "i", "j"
+    ),
+    factor_vector = factor(c(
+      "low", "medium", "high", "low", "medium",
+      "high", "low", "medium", "high", "low"
+    ))
+  )
+```
+
+```{r}
+mean(pull(hw_df, random_sample))
+mean(pull(hw_df, logical_vector))
+mean(pull(hw_df, character_vector))
+mean(pull(hw_df, factor_vector))
+```
+
+```{r, results='hide'}
+as.numeric(pull(hw_df, logical_vector))
+as.numeric(pull(hw_df, character_vector))
+as.numeric(pull(hw_df, factor_vector))
+```
+
+Applying as.numeric to the logical vector converts TRUE to 1 and FALSE to 0, which helps explain why its mean can be calculated. Applying as.numeric to the character vector does not produce meaningful numeric values because the character strings are not numbers. Applying as.numeric to the factor returns the underlying integer codes of its levels, rather than meaningful numerical measurements. This helps explain why taking the mean is appropriate for the numeric and logical variables but not directly meaningful for the character or factor variables.
+
+
+
